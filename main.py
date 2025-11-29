@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from agent import run_agent
 from dotenv import load_dotenv
 import uvicorn
@@ -16,9 +16,9 @@ EMAIL = os.getenv("EMAIL")
 SECRET = os.getenv("SECRET")
 
 class SolveRequest(BaseModel):
-    email: str
-    secret: str
-    url: str
+    email: str = Field(..., description="Email address for the quiz submission")
+    secret: str = Field(..., description="Secret key for authentication")
+    url: str = Field(..., description="URL of the quiz to solve")
 
 app = FastAPI()
 app.add_middleware(
@@ -53,7 +53,7 @@ def healthz():
         "uptime_seconds": int(time.time() - START_TIME)
     }
 
-@app.post("/solve")
+@app.post("/solve", summary="Solve quiz", description="Submit a quiz URL to be solved by the autonomous agent")
 async def solve(request: SolveRequest, background_tasks: BackgroundTasks):
     if request.secret != SECRET:
         raise HTTPException(status_code=403, detail="Invalid secret")
