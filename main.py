@@ -20,7 +20,7 @@ class SolveRequest(BaseModel):
     secret: str = Field(..., description="Secret key for authentication")
     url: str = Field(..., description="URL of the quiz to solve")
 
-app = FastAPI()
+app = FastAPI(title="LLM Analysis Quiz Solver API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # or specific domains
