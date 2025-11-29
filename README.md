@@ -84,19 +84,23 @@ The project uses a **LangGraph state machine** architecture with the following c
 ## 📁 Project Structure
 
 ```
-LLM-Analysis-TDS-Project-2/
+TDS_2/
 ├── agent.py                    # LangGraph state machine & orchestration
 ├── main.py                     # FastAPI server with /solve endpoint
 ├── pyproject.toml              # Project dependencies & configuration
 ├── Dockerfile                  # Container image with Playwright
-├── .env                        # Environment variables (not in repo)
+├── .env.example                # Environment variables template
 ├── tools/
 │   ├── __init__.py
 │   ├── web_scraper.py          # Playwright-based HTML renderer
-│   ├── code_generate_and_run.py # Python code executor
+│   ├── run_code.py             # Python code executor
 │   ├── download_file.py        # File downloader
 │   ├── send_request.py         # HTTP POST tool
-│   └── add_dependencies.py     # Package installer
+│   ├── add_dependencies.py     # Package installer
+│   ├── audio_transcribing.py   # Audio transcription tool
+│   ├── image_content_extracter.py # Image content extraction
+│   └── encode_image_to_base64.py # Image encoding tool
+├── shared_store.py             # Shared state management
 └── README.md
 ```
 
@@ -111,8 +115,8 @@ LLM-Analysis-TDS-Project-2/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/saivijayragav/LLM-Analysis-TDS-Project-2.git
-cd LLM-Analysis-TDS-Project-2
+git clone https://github.com/Harshitha132005/TDS_2.git
+cd TDS_2
 ```
 
 ### Step 2: Install Dependencies
@@ -191,6 +195,8 @@ The server will start on `http://0.0.0.0:7860`
 
 ### Testing the Endpoint
 
+**Local Testing:**
+
 Send a POST request to test your setup:
 
 ```bash
@@ -202,6 +208,18 @@ curl -X POST http://localhost:7860/solve \
     "url": "https://tds-llm-analysis.s-anand.net/demo"
   }'
 ```
+
+**Production API:**
+
+The API is deployed on Render and available at:
+
+```
+https://tds-2-uezt.onrender.com/solve
+```
+
+You can also access the interactive API documentation at:
+- Swagger UI: https://tds-2-uezt.onrender.com/docs
+- ReDoc: https://tds-2-uezt.onrender.com/redoc
 
 Expected response:
 
@@ -215,6 +233,8 @@ The agent will run in the background and solve the quiz chain autonomously.
 
 ## 🌐 API Endpoints
 
+**Base URL (Production):** `https://tds-2-uezt.onrender.com`
+
 ### `POST /solve`
 
 Receives quiz tasks and triggers the autonomous agent.
@@ -227,6 +247,18 @@ Receives quiz tasks and triggers the autonomous agent.
   "secret": "your_secret_string",
   "url": "https://example.com/quiz-123"
 }
+```
+
+**Example Request:**
+
+```bash
+curl -X POST https://tds-2-uezt.onrender.com/solve \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "your.email@example.com",
+    "secret": "your_secret_string",
+    "url": "https://tds-llm-analysis.s-anand.net/demo"
+  }'
 ```
 
 **Responses:**
@@ -301,6 +333,18 @@ docker run -p 7860:7860 \
   -e GOOGLE_API_KEY="your_api_key" \
   llm-analysis-agent
 ```
+
+### Deploy to Render
+
+1. Create a new Web Service on [Render](https://render.com)
+2. Connect your GitHub repository: `https://github.com/Harshitha132005/TDS_2`
+3. Select **Docker** as the environment
+4. Add environment variables in Render dashboard:
+   - `EMAIL`: Your email address
+   - `SECRET`: Your secret key
+   - `GOOGLE_API_KEY`: Your Gemini API key
+5. Render will automatically build and deploy your service
+6. Your API will be available at: `https://tds-2-uezt.onrender.com/solve`
 
 ### Deploy to HuggingFace Spaces
 
@@ -384,8 +428,10 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-**Author**: Sai Vijay Ragav 
+**Author**: Harshitha  
 **Course**: Tools in Data Science (TDS)
 **Institution**: IIT Madras
+**GitHub**: [Harshitha132005/TDS_2](https://github.com/Harshitha132005/TDS_2)
+**Live API**: [https://tds-2-uezt.onrender.com](https://tds-2-uezt.onrender.com)
 
-For questions or issues, please open an issue on the [GitHub repository](https://github.com/saivijayragav/LLM-Analysis-TDS-Project-2).
+For questions or issues, please open an issue on the [GitHub repository](https://github.com/Harshitha132005/TDS_2).
